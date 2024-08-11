@@ -1,0 +1,38 @@
+# mongo-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-mongodb-app-service
+spec:
+  selector:
+    app: flask-mongodb-app
+  ports:
+    - protocol: "TCP"
+      port: 6000
+      targetPort: 5000
+  type: LoadBalancer
+
+
+
+# mongo-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-mongodb-app
+spec:
+  selector:
+    matchLabels:
+      app: flask-mongodb-app
+  replicas: 5
+  template:
+    metadata:
+      labels:
+        app: flask-mongodb-app
+    spec:
+      containers:
+      - name: flask-mongodb-app
+        image: flask-kubernetes
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5000
+
